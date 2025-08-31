@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tạo QR Nạp Tiền - VietQR</title>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #1c1c1c;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.8);
+      width: 420px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #00ff99;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    select, input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #000;
+      border-radius: 8px;
+      background: #222;
+      color: #fff;
+      font-size: 16px;
+      box-sizing: border-box;
+      outline: none;
+      transition: 0.3s;
+    }
+    select:focus, input:focus {
+      box-shadow: 0 0 15px #00ff99;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      background: linear-gradient(145deg, #006600, #00cc00);
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    button::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://i.ibb.co/s65xLqf/crack-texture.png');
+      opacity: 0.3;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+    button:hover {
+      background: linear-gradient(145deg, #00cc00, #009900);
+      box-shadow: 0 0 20px #00ff99;
+    }
+    #qrcode {
+      margin-top: 20px;
+    }
+    img {
+      margin-top: 15px;
+      border-radius: 12px;
+      border: 3px solid #00ff99;
+      width: 260px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Tạo QR Nạp Tiền</h2>
+    <select id="bank">
+      <option value="">-- Chọn Ngân Hàng --</option>
+      <option value="VCB">Vietcombank</option>
+      <option value="TCB">Techcombank</option>
+      <option value="ACB">ACB</option>
+      <option value="BIDV">BIDV</option>
+      <option value="MB">MB Bank</option>
+      <option value="VPB">VPBank</option>
+      <option value="HDB">HDBank</option>
+      <option value="VIB">VIB</option>
+      <option value="SHB">SHB</option>
+      <option value="OCB">OCB</option>
+      <option value="SCB">SCB</option>
+      <option value="MSB">MSB</option>
+      <option value="LPB">LienVietPostBank</option>
+      <option value="KLB">KienLongBank</option>
+      <option value="ABB">ABBANK</option>
+      <option value="PGB">PGBank</option>
+      <option value="PVcomBank">PVcomBank</option>
+      <option value="NAB">NamABank</option>
+      <option value="BacABank">BacABank</option>
+      <option value="SeABank">SeABank</option>
+      <option value="SaigonBank">SaigonBank</option>
+      <option value="OceanBank">OceanBank</option>
+      <option value="GPB">GPBank</option>
+      <option value="CBB">CBBank</option>
+      <option value="DongABank">DongABank</option>
+      <!-- Giả lập thêm nhiều ngân hàng để đủ ~100 -->
+      <option value="VRB">VRB</option>
+      <option value="UOB">UOB</option>
+      <option value="HSBC">HSBC</option>
+      <option value="CitiBank">CitiBank</option>
+      <option value="ANZ">ANZ</option>
+      <option value="DBS">DBS Bank</option>
+      <option value="StandardChartered">Standard Chartered</option>
+      <option value="PublicBank">Public Bank</option>
+      <option value="Shinhan">Shinhan Bank</option>
+      <option value="Woori">Woori Bank</option>
+      <option value="KEB">KEB Hana Bank</option>
+      <option value="IBK">IBK</option>
+      <option value="Kookmin">Kookmin Bank</option>
+      <option value="Mizuho">Mizuho</option>
+      <option value="SMBC">SMBC</option>
+      <option value="UFJ">MUFG</option>
+      <option value="Rakuten">Rakuten Bank</option>
+      <option value="Agribank">Agribank</option>
+      <option value="VietinBank">VietinBank</option>
+      <option value="Eximbank">Eximbank</option>
+      <option value="Sacombank">Sacombank</option>
+      <option value="LienViet">LienVietBank</option>
+      <option value="SaigonBank">SaigonBank</option>
+      <option value="Khac">Khác...</option>
+    </select>
+    <input type="text" id="account" placeholder="Số tài khoản">
+    <input type="text" id="name" placeholder="Tên tài khoản" style="text-transform: uppercase;">
+    <input type="text" id="amount" placeholder="Số tiền (vd: 100000)">
+    <input type="text" id="content" placeholder="Nội dung chuyển khoản">
+    <button onclick="generateQR()">Tạo QR</button>
+    <div id="qrcode"></div>
+  </div>
+
+  <script>
+    const amountInput = document.getElementById('amount');
+    amountInput.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/,/g, '');
+      if (!isNaN(value) && value !== '') {
+        e.target.value = Number(value).toLocaleString('en-US');
+      }
+    });
+
+    function generateQR() {
+      let bank = document.getElementById('bank').value;
+      let account = document.getElementById('account').value;
+      let name = document.getElementById('name').value.toUpperCase();
+      let amount = document.getElementById('amount').value.replace(/,/g, '');
+      let content = document.getElementById('content').value;
+
+      if (!bank || !account || !name || !amount) {
+        alert("Vui lòng nhập đủ thông tin!");
+        return;
+      }
+
+      let qrUrl = `https://img.vietqr.io/image/${bank}-${account}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(content)}&accountName=${encodeURIComponent(name)}`;
+      document.getElementById('qrcode').innerHTML = `<img src="${qrUrl}" alt="QR Code">`;
+    }
+  </script>
+</body>
+</html>
