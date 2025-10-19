@@ -1,279 +1,518 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PHẠM VĂN HOÀ BUID VIETQR NAPAS 247</title>
+  <title>VietQR Banking 247</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: radial-gradient(circle at top, #0a0f18, #000);
+      --card-bg: rgba(20,25,35,0.95);
+      --text: #e0e6ed;
+      --accent: #3b82f6;
+      --green: #16a34a;
+      --yellow: #facc15;
+      --red: #dc2626;
+      --input-bg: #111827;
+      --input-border: #374151;
+      --input-text: #f1f5f9;
+      --qr-border: orange;
+    }
+    body.light {
+      --bg: #f0f3f8;
+      --card-bg: #ffffff;
+      --text: #111827;
+      --accent: #3b82f6;
+      --green: #16a34a;
+      --yellow: #facc15;
+      --red: #dc2626;
+      --input-bg: #f1f5f9;
+      --input-border: #d1d5db;
+      --input-text: #111827;
+      --qr-border: #008000;
+    }
+
+    * { box-sizing: border-box; margin:0; padding:0; }
     body {
-      background: #f9f9f9;
-      color: #000;
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
+      padding: 20px;
       transition: background 0.3s, color 0.3s;
     }
-    body.dark-mode {
-      background: #111;
-      color: #fff;
-    }
+
     .container {
-      background: #fff;
-      padding: 25px;
-      border-radius: 16px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 30px 25px;
+      max-width: 480px;
       width: 100%;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 4px 25px rgba(0,0,0,0.15);
-      transition: background 0.3s, color 0.3s;
-      box-sizing: border-box;
-    }
-    body.dark-mode .container { background: #1c1c1c; }
-    h2 {
-      margin-bottom: 20px;
-      font-size: 18px;
-      letter-spacing: 1px;
-      color: #008000;
-      font-weight: bold;
-      text-shadow: 0 0 8px rgba(0,128,0,0.4);
-    }
-    .input-group {
+      box-shadow: 0 0 25px rgba(0,123,255,0.3);
       position: relative;
-      margin-top: 18px;
-      text-align: left;
-      width: 100%;
     }
-    .input-group input, 
-    .input-group select {
+
+    h2 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      text-shadow: 0 0 8px #fff, 0 0 12px var(--accent);
+      animation: glow 2s infinite alternate;
+      margin-bottom: 25px;
+    }
+
+    #toggleMode {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      background: var(--card-bg);
+      color: var(--text);
+      z-index: 10;
+      transition: 0.3s;
+    }
+    #toggleMode:hover {
+      transform: scale(1.1);
+      box-shadow:0 0 8px var(--accent);
+    }
+
+    @keyframes glow {
+      from { text-shadow:0 0 6px #fff,0 0 10px var(--accent); opacity:1;}
+      to { text-shadow:0 0 12px #fff,0 0 20px #60a5fa; opacity:0.85;}
+    }
+
+    label { display: block; margin-bottom:6px; font-weight:500; }
+    input, select {
       width: 100%;
-      padding: 12px 14px;
-      border: 2px solid #ccc;
+      padding: 10px 12px;
       border-radius: 10px;
-      background: #fafafa;
+      border: 1px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--input-text);
       font-size: 15px;
-      font-weight: 600;
-      color: #000;
-      caret-color: #006400;
-      transition: all 0.3s;
-      box-sizing: border-box;
+      margin-bottom:15px;
+      transition: 0.3s, box-shadow 0.3s;
+      text-transform: uppercase;
     }
-    .input-group input:focus,
-    .input-group select:focus {
-      border-color: #00b300;
-      box-shadow: 0 0 8px rgba(0,180,0,0.6);
-      background: #fff;
+
+    select {
+      font-weight: 600;
+    }
+
+    /* ✅ Cập nhật style cho option ngân hàng */
+    select option {
+      font-weight: 700; /* In đậm */
+      color: #4b5563;    /* Xám than */
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.3); /* Phát sáng nhẹ */
+      background-color: var(--input-bg);
+    }
+
+    select option:hover {
+      color: #1f2937;
+      text-shadow: 0 0 10px rgba(59, 130, 246, 0.6); /* Phát sáng khi hover */
+    }
+
+    input:focus, select:focus {
+      border-width: 2px;
       outline: none;
     }
-    body.dark-mode .input-group input,
-    body.dark-mode .input-group select {
-      background: #000;
-      color: #fff;
-      border: 2px solid #444;
+    body.light input:focus, body.light select:focus {
+      border-color: orange;
+      box-shadow: 0 0 10px orange;
     }
-    body.dark-mode .input-group input:focus,
-    body.dark-mode .input-group select:focus {
-      border-color: #00ff66;
-      box-shadow: 0 0 10px rgba(0,255,100,0.7);
+    body:not(.light) input:focus, body:not(.light) select:focus {
+      border-color: #000;
+      box-shadow: 0 0 10px #000;
     }
-    .input-group label {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #666;
-      font-size: 15px;
-      pointer-events: none;
-      transition: 0.3s ease all;
-      background: transparent;
-      padding: 0 4px;
+
+    .generate-btn {
+      background: var(--green);
+      width:100%;
+      padding:12px;
+      border-radius:12px;
+      border:none;
+      font-weight:600;
+      font-size:15px;
+      color:white;
+      cursor:pointer;
+      transition:0.3s, box-shadow 0.3s;
     }
-    .input-group input:focus + label,
-    .input-group input:not(:placeholder-shown) + label {
-      top: -8px;
-      left: 12px;
-      font-size: 12px;
-      color: #008000;
-      font-weight: bold;
-      background: #fff;
+    .generate-btn:hover {
+      box-shadow:0 0 12px var(--green),0 0 20px #22c55e;
+      transform:scale(1.03);
     }
-    body.dark-mode .input-group input:focus + label,
-    body.dark-mode .input-group input:not(:placeholder-shown) + label {
-      color: #00ff66;
-      background: #1c1c1c;
+
+    #qrBox { display:none; margin-top:20px; text-align:center; }
+    #qrBox img {
+      width:240px;
+      border-radius:10px;
+      border:3px solid var(--qr-border);
+      background:white;
+      box-shadow:0 0 12px rgba(0,0,0,0.3);
+      transition:border-color 0.3s;
     }
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 22px;
-      background: linear-gradient(90deg, #008000, #00b300);
-      border: none;
-      border-radius: 12px;
-      font-size: 17px;
-      font-weight: bold;
-      color: #fff;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,128,0,0.4);
-      transition: all 0.3s;
+
+    .actionBtns {
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:12px;
     }
-    button:hover {
-      background: linear-gradient(90deg, #00b300, #00e600);
-      box-shadow: 0 0 20px rgba(0,255,0,0.7);
-      transform: translateY(-2px);
+    .actionBtns button {
+      flex:1;
+      padding:10px;
+      font-size:14px;
+      border-radius:10px;
+      font-weight:600;
+      transition:0.3s, box-shadow 0.3s;
     }
-    .mode-toggle {
-      margin-bottom: 20px;
-      cursor: pointer;
-      display: inline-block;
-      transition: transform 0.5s ease;
+    .btn-yellow {
+      background: var(--yellow);
+      color:#111;
     }
-    .mode-toggle.rotate-left { transform: rotate(-180deg); }
-    .mode-toggle.rotate-right { transform: rotate(180deg); }
-    #qrcode img {
+    .btn-yellow:hover {
+      box-shadow:0 0 12px var(--yellow),0 0 20px #fcd34d;
+      transform:scale(1.05);
+    }
+    .btn-red {
+      background: var(--red);
+      color:white;
+    }
+    .btn-red:hover {
+      box-shadow:0 0 12px var(--red),0 0 20px #ef4444;
+      transform:scale(1.05);
+    }
+
+    .copy-btn {
+      background: orange;
+      color: #111;
+      width:100%;
+      padding:10px;
+      margin-bottom:15px;
+      border:none;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+      transition:0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .copy-btn:hover {
+      box-shadow:0 0 12px orange,0 0 20px rgba(255,165,0,0.4);
+      transform:scale(1.05);
+    }
+
+    .socials-box {
       margin-top: 20px;
-      border-radius: 14px;
-      border: 3px solid #008000;
-      width: 100%;
-      max-width: 260px;
-      height: auto;
-      box-shadow: 0 0 15px rgba(0,180,0,0.5);
+      padding: 12px 20px;
+      background: var(--card-bg);
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      display: flex;
+      justify-content: center;
     }
-    @media (max-width: 750px) {
-      .container { padding: 18px; max-width: 350px; }
-      h2 { font-size: 16px; }
-      .input-group input, .input-group select { font-size: 14px; padding: 10px; }
-      button { font-size: 15px; padding: 12px; }
-      #qrcode img { max-width: 200px; }
+
+    .socials { display: flex; gap: 15px; }
+    .socials img {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .socials img:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    small {
+      display:block;
+      text-align:center;
+      color:#64748b;
+      margin-top:15px;
+      font-size:13px;
+    }
+    small a { color:#008000; text-decoration:none; }
+
+    .bank-logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #bankLogo {
+      display: none;
+      max-width: 140px;
+      max-height: 60px;
+      margin-top: 12px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+    #bankLogo:hover {
+      transform: scale(1.1);
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="mode-toggle" id="colorMode">
-      <svg class="color-mode" height="40" viewBox="0 0 400 400" width="40">
-        <circle cx="200" cy="200" fill="white" r="195" stroke="#000" stroke-width="10"></circle>
-        <path d="M 200 375 A 175 175 0 0 1 200 25"></path>
-        <path d="M 200 300 A 100 100 0 0 1 200 100" fill="#FFF"></path>
-        <path d="M 200 100 A 100 100 180 0 1 200 300"></path>
-      </svg>
+<div class="container">
+    <h2>
+      <span>⚡ PHẠM VĂN HÒA PRIORITY BUILD VIETQR BANKING 247 ⚡</span>
+      <button id="toggleMode">🌙</button>
+    </h2>
+
+    <label>Ngân hàng</label>
+    <select id="bank">
+      <option value="">-- Chọn ngân hàng --</option>
+    </select>
+
+    <div class="bank-logo-container">
+      <img id="bankLogo" src="" alt="Logo ngân hàng">
     </div>
 
-    <h2>PHẠM VĂN HOÀ BUID VIETQR NAPAS 247</h2>
+    <label>Số tài khoản</label>
+    <input type="text" id="account" placeholder="VD: 123456789">
+    <button class="copy-btn" onclick="copyAccount()">📋 Sao chép số tài khoản</button>
 
-    <div class="input-group">
-      <select id="bank" required>
-        <option value="">-- Chọn Ngân Hàng --</option>
-        <option value="VCB">Vietcombank</option>
-        <option value="TCB">Techcombank</option>
-        <option value="ACB">ACB</option>
-        <option value="BIDV">BIDV</option>
-        <option value="MB">MB Bank</option>
-        <option value="VPB">VPBank</option>
-        <option value="HDB">HDBank</option>
-        <option value="VIB">VIB</option>
-        <option value="SHB">SHB</option>
-        <option value="SCB">SCB</option>
-        <option value="OCB">OCB</option>
-        <option value="ABB">ABBANK</option>
-        <option value="PGB">PGBank</option>
-        <option value="EIB">Eximbank</option>
-        <option value="SGB">Saigonbank</option>
-        <option value="BAB">Bac A Bank</option>
-        <option value="KLB">KienLongBank</option>
-        <option value="VRB">VRB</option>
-        <option value="GPB">GPBank</option>
-        <option value="SEAB">SeABank</option>
-        <option value="CBB">CBBank</option>
-        <option value="TPB">TPBBank</option>
-      </select>
+    <label>Tên tài khoản</label>
+    <input type="text" id="accountName" placeholder="VD: NGUYEN VAN A">
+
+    <label>Số tiền (tùy chọn)</label>
+    <input type="text" id="amount" placeholder="VD: 50.000">
+
+    <label>Nội dung chuyển tiền</label>
+    <input type="text" id="memo" placeholder="VD: THANH TOAN DON HANG">
+
+    <button class="generate-btn" onclick="generateQR()">⚡ TẠO MÃ QR ⚡</button>
+
+    <div id="qrBox">
+      <img id="qrImage" src="" alt="QR">
+      <div class="actionBtns">
+        <button class="btn-yellow" onclick="downloadQR()">💾 Tải QR</button>
+        <button class="btn-red" onclick="resetForm()">🔄 Reset</button>
+      </div>
     </div>
 
-    <div class="input-group">
-      <input type="text" id="account" placeholder=" " required>
-      <label for="account">Số tài khoản</label>
-    </div>
+    <small>
+      © 2025 VietQR Creator — API VietQR.io<br>
+      👨‍💻 Tác giả: <b>PHẠM VĂN HÒA PRIORITY</b><br>
+      📧 Email: <a href="mailto:phamvanhoaapi2002@gmail.com">phamvanhoaapi2002@gmail.com</a><br>
+      ☎️ SĐT: <a href="tel:0869719516">0869 719 516</a>
+    </small>
 
-    <div class="input-group">
-      <input type="text" id="name" placeholder=" " required>
-      <label for="name">Tên tài khoản</label>
+    <div class="socials-box">
+      <div class="socials">
+        <a href="https://www.facebook.com/laptrinhvienPHAMVANHOApriority" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/1200px-2021_Facebook_icon.svg.png" alt="Facebook">
+        </a>
+        <a href="https://m.me/laptrinhvienPHAMVANHOApriority" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Facebook_Messenger_logo_2013.svg/2030px-Facebook_Messenger_logo_2013.svg.png" alt="Messenger">
+        </a>
+        <a href="https://t.me/phamvanhoaapi2002" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/2048px-Telegram_2019_Logo.svg.png" alt="Telegram">
+        </a>
+        <a href="https://wa.me/84869719516" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2044px-WhatsApp.svg.png" alt="WhatsApp">
+        </a>
+        <a href="https://www.youtube.com/@PHAMVANHOAAPI2002" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube">
+        </a>
+        <a href="https://zalo.me/0869719516" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/2048px-Icon_of_Zalo.svg.png" alt="Zalo">
+        </a>
+      </div>
     </div>
-
-    <div class="input-group">
-      <input type="text" id="amount" placeholder=" " required>
-      <label for="amount">Số tiền (VND)</label>
-    </div>
-
-    <div class="input-group">
-      <input type="text" id="content" placeholder=" ">
-      <label for="content">Nội dung chuyển khoản</label>
-    </div>
-
-    <button id="generateBtn">Tạo QR</button>
-    <div id="qrcode"></div>
-    <div id="download"></div>
   </div>
 
   <script>
-    const accountInput = document.getElementById('account');
-    const nameInput = document.getElementById('name');
-    const amountInput = document.getElementById('amount');
-    const generateBtn = document.getElementById('generateBtn');
-    const qrcodeDiv = document.getElementById('qrcode');
-    const downloadDiv = document.getElementById('download');
-    const colorModeBtn = document.getElementById('colorMode');
-    const body = document.body;
+    let bankData = [];
 
-    // 👉 Số tài khoản: chữ + số, chữ in hoa
-    accountInput.addEventListener('input', e => {
-      e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
-    });
+    async function loadBanks() {
+      try {
+        const res = await fetch('https://api.vietqr.io/v2/banks');
+        if (!res.ok) throw new Error('Không lấy được danh sách ngân hàng: ' + res.status);
+        const data = await res.json();
+        bankData = (data.data || []).filter(b => b.bin && b.shortName);
+        const sel = document.getElementById('bank');
+        bankData.forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b.bin;
+          opt.textContent = `${b.shortName} (${b.bin})`;
+          opt.dataset.logo = b.logo || "";
+          sel.appendChild(opt);
+        });
+      } catch (err) {
+        console.error(err);
+        alert("Không tải được danh sách ngân hàng!");
+      }
+    }
 
-    // 👉 Tên tài khoản: chỉ chữ + khoảng trắng, in hoa
-    nameInput.addEventListener('input', e => {
-      e.target.value = e.target.value.replace(/[^A-Za-zÀ-ỹ\s]/g, "").toUpperCase();
-    });
+    function showBankLogo() {
+      const sel = document.getElementById('bank');
+      const option = sel.selectedOptions[0];
+      if (!option) return;
+      const logo = option.dataset.logo;
+      const img = document.getElementById('bankLogo');
+      if (logo) {
+        img.src = logo;
+        img.style.display = 'inline-block';
+      } else {
+        // ảnh placeholder khi không có logo
+        img.src = "https://upload.wikimedia.org/wikipedia/commons/3/3b/Placeholder_view_vector.svg";
+        img.style.display = 'inline-block';
+      }
+    }
 
-    // 👉 Số tiền: từ 0 đến vô hạn
-    amountInput.addEventListener('input', e => {
-      let rawValue = e.target.value.replace(/\D/g, "");
-      if (rawValue === "") { e.target.value = ""; return; }
-      let num = parseInt(rawValue);
-      e.target.value = num.toLocaleString('vi-VN');
-    });
+    // format: hiển thị có dấu phân cách; lưu giá trị thô vào dataset.raw
+    function formatAmount(input) {
+      // chỉ giữ ký tự số
+      let digits = String(input.value).replace(/[^\d]/g, '');
+      if (!digits) {
+        input.value = "";
+        delete input.dataset.raw;
+        return;
+      }
+      input.dataset.raw = digits; // lưu giá trị thô (chuỗi chỉ gồm chữ số)
+      // hiển thị dạng phân cách theo locale VN (ví dụ: 1.000.000)
+      input.value = Number(digits).toLocaleString('vi-VN');
+    }
 
-    // Dark/Light Mode
-    let isDark = false;
-    colorModeBtn.addEventListener('click', () => {
-      isDark = !isDark;
-      body.classList.toggle('dark-mode', isDark);
-      colorModeBtn.classList.remove('rotate-left', 'rotate-right');
-      colorModeBtn.classList.add(isDark ? 'rotate-right' : 'rotate-left');
-    });
+    // parseAmount: nhận input element hoặc chuỗi, trả về số nguyên hoặc 0
+    function parseAmount(source) {
+      if (!source) return 0;
+      if (typeof source === 'object' && source.dataset) {
+        const raw = source.dataset.raw;
+        return raw ? parseInt(raw, 10) : 0;
+      }
+      // nếu truyền chuỗi, loại bỏ tất cả ký tự không phải số
+      const digits = String(source).replace(/[^\d]/g, '');
+      return digits ? parseInt(digits, 10) : 0;
+    }
 
-    // Generate QR
-    generateBtn.addEventListener('click', () => {
-      let bank = document.getElementById('bank').value;
-      let account = accountInput.value.trim();
-      let name = nameInput.value.trim();
-      let amount = amountInput.value.replace(/\D/g, "");
-      let content = document.getElementById('content').value.trim();
+    async function generateQR() {
+      const bank = document.getElementById("bank").value;
+      const account = document.getElementById("account").value.trim();
+      const name = document.getElementById("accountName").value.trim();
+      const amountInput = document.getElementById("amount");
+      const memo = document.getElementById("memo").value.trim();
 
-      if (!bank || !account || !name || amount === "") {
-        alert("Vui lòng nhập đủ thông tin!");
+      if (!bank || !account || !name) {
+        alert("⚠️ Vui lòng nhập đầy đủ ngân hàng, số tài khoản và tên tài khoản!");
         return;
       }
 
-      let numAmount = parseInt(amount);
-      if (isNaN(numAmount)) numAmount = 0;
+      // lấy giá trị thô từ dataset.raw để tránh lỗi do format
+      const amount = amountInput.dataset.raw ? parseInt(amountInput.dataset.raw, 10) : undefined;
 
-      let qrUrl = `https://img.vietqr.io/image/${bank}-${account}-compact2.png?amount=${numAmount}&addInfo=${encodeURIComponent(content)}&accountName=${encodeURIComponent(name)}`;
-      qrcodeDiv.innerHTML = `<img src="${qrUrl}" alt="QR Code">`;
-      downloadDiv.innerHTML = `<a href="${qrUrl}" download="vietqr.png">⬇️ Tải QR về máy</a>`;
+      const body = {
+        accountNo: account,
+        accountName: name,
+        acqId: bank,
+        addInfo: memo || "",
+        format: "base64"
+      };
+      if (typeof amount === 'number' && !isNaN(amount) && amount > 0) {
+        body.amount = amount;
+      }
+
+      const btn = document.querySelector(".generate-btn");
+      const prevText = btn.textContent;
+      btn.textContent = "⏳ Đang tạo...";
+      btn.disabled = true;
+      document.getElementById("qrBox").style.display = "none";
+
+      try {
+        const res = await fetch("https://api.vietqr.io/v2/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+
+        if (!res.ok) {
+          // lấy nội dung lỗi nếu có
+          let errText = `Lỗi API: ${res.status}`;
+          try { const t = await res.text(); if (t) errText += ' — ' + t; } catch(e){}
+          throw new Error(errText);
+        }
+
+        const result = await res.json();
+        if (result?.data) {
+          const qrBase64 = result.data.qrDataURL || (result.data.qrCode ? "data:image/png;base64," + result.data.qrCode : "");
+          if (!qrBase64) throw new Error("API trả về dữ liệu QR không hợp lệ");
+          document.getElementById("qrImage").src = qrBase64;
+          document.getElementById("qrBox").style.display = "block";
+        } else {
+          console.error(result);
+          alert("❌ Không tạo được mã QR!");
+        }
+      } catch (e) {
+        console.error(e);
+        alert("Lỗi khi gọi API VietQR!\n" + (e.message || ""));
+      } finally {
+        btn.textContent = prevText || "🚀 TẠO MÃ QR";
+        btn.disabled = false;
+      }
+    }
+
+    function downloadQR() {
+      const qr = document.getElementById("qrImage");
+      if (!qr.src) {
+        alert("Chưa có mã QR để tải!");
+        return;
+      }
+      const link = document.createElement('a');
+      link.href = qr.src;
+      link.download = "vietqr.png";
+      link.click();
+    }
+
+    function resetForm() {
+      ["account", "accountName", "amount", "memo"].forEach(id => {
+        const el = document.getElementById(id);
+        el.value = "";
+        if (el.dataset) delete el.dataset.raw;
+      });
+      document.getElementById("qrBox").style.display = "none";
+      document.getElementById('bank').selectedIndex = 0;
+      const img = document.getElementById('bankLogo');
+      img.style.display = 'none';
+    }
+
+    function copyAccount() {
+      const acc = document.getElementById("account").value.trim();
+      if (!acc) {
+        alert("⚠️ Chưa có số tài khoản để sao chép!");
+        return;
+      }
+      navigator.clipboard.writeText(acc).then(() => {
+        alert("✅ Đã sao chép số tài khoản!");
+      }).catch(() => {
+        alert("❌ Không thể sao chép. Vui lòng sao chép thủ công.");
+      });
+    }
+
+    const toggleBtn = document.getElementById("toggleMode");
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+      toggleBtn.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+      localStorage.setItem('theme', document.body.classList.contains("light") ? 'light' : 'dark');
     });
+
+    // khôi phục theme nếu có
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light');
+      toggleBtn.textContent = '☀️';
+    }
+
+    document.getElementById("bank").addEventListener("change", showBankLogo);
+    document.getElementById("amount").addEventListener("input", (e) => formatAmount(e.target));
+
+    loadBanks();
   </script>
 </body>
 </html>
